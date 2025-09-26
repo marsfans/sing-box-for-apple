@@ -1,0 +1,56 @@
+name: Build Sing-Box iOS Unsigned IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-unsigned-ipa:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode environment
+        # 确保使用 macOS 自带 Xcode
+        run: xcode-select -p
+
+      - name: Install dependencies (if needed)
+        run: |
+          # 如果项目用 CocoaPods / Swift Package Manager /其它依赖工具
+          # 下面为示例
+          cd sing-box-for-apple
+          if [ -f Podfile ]; then
+            brew install cocoapods
+            pod install
+          fi
+          # 可能需要 swift package resolve
+          swift package resolve
+
+      - name: Build Release Unsigned
+        working-directory: sing-box-for-apple
+        run: |
+          xcodebuild \
+            -project sing-box.xcodeproj \
+            -scheme sing-box \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package IPA
+        working-directory: sing-box-for-apple
+        run: |
+          cd build/Build/Products/Release-iphoneos
+          mkdir -p Payload
+          cp -r sing-box.app Payload/
+          zip -r ../sing-box-unsigned.ipa Payload
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: sing-box-ios-unsigned-ipa
+          path: sing-box-for-apple/build/Build/Products/Release-iphoneos/sing-box-unsigned.ipa
