@@ -22,6 +22,7 @@ jobs:
       - name: Build Release Unsigned
         # working-directory: SFI
         run: |
+          xcodebuild -list -project sing-box.xcodeproj
           xcodebuild \
             -project sing-box.xcodeproj \
             -scheme sing-box \
