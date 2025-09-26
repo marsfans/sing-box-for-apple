@@ -23,7 +23,7 @@ jobs:
         # working-directory: SFI
         run: |
           xcodebuild archive \
-          -scheme Libbox \
+          -scheme SFI \
           -sdk iphoneos \
           -configuration Release \
           -archivePath ./build/ios_devices.xcarchive \
