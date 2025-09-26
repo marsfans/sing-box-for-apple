@@ -25,7 +25,7 @@ jobs:
           xcodebuild -list -project sing-box.xcodeproj
           xcodebuild \
             -project sing-box.xcodeproj \
-            -scheme sing-box \
+            -scheme SFI \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build \
