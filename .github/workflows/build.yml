@@ -22,6 +22,7 @@ jobs:
         run: |
           # 如果项目用 CocoaPods / Swift Package Manager /其它依赖工具
           # 下面为示例
+          cd SFI
           if [ -f Podfile ]; then
             brew install cocoapods
             pod install
@@ -30,6 +31,7 @@ jobs:
           swift package resolve
 
       - name: Build Release Unsigned
+        working-directory: SFI
         run: |
           xcodebuild \
             -project sing-box.xcodeproj \
@@ -40,6 +42,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO
 
       - name: Package IPA
+        working-directory: SFI
         run: |
           cd build/Build/Products/Release-iphoneos
           mkdir -p Payload
