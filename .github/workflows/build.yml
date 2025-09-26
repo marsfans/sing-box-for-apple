@@ -18,17 +18,6 @@ jobs:
         # 确保使用 macOS 自带 Xcode
         run: xcode-select -p
 
-      - name: Install dependencies (if needed)
-        run: |
-          # 如果项目用 CocoaPods / Swift Package Manager /其它依赖工具
-          # 下面为示例
-          cd SFI
-          if [ -f Podfile ]; then
-            brew install cocoapods
-            pod install
-          fi
-          # 可能需要 swift package resolve
-          swift package resolve
 
       - name: Build Release Unsigned
         working-directory: SFI
